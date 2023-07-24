@@ -40,3 +40,47 @@ exports.signup=async (req,res,next)=>{
         res.json({message:'something went wrong',success:false});
     }
 };
+
+exports.login=async (req,res,next)=>{
+    //console.log("entered into login middleware function");
+    try{
+        //console.log("entered into try block");
+        const checkEmails = req.body.email;
+        const checkPassword = req.body.password;
+        const users = await User.findAll({
+            where:{
+                email:checkEmails
+            }
+        })
+        //console.log("users=",users);
+        if(users.length>0){
+            bcrypt.compare(checkPassword, users[0].password, async(err, result)=>{
+                if(err){
+                    return(res.json({message:"dcrypting error",
+                    success:false}))
+                }
+                //console.log(result);
+                if(result===true){
+                    //res.redirect("index.html");
+                    return(
+                        res.json({message:"Password is correct",
+                    success:true, token: generateAccessToken(users[0].id)}
+                    ))
+
+                    
+
+                }else{
+                    return(res.json({message:"Password is incorrect",
+                    success:false}))
+                }
+            })
+        }
+    }
+    catch{
+
+    }
+};
+
+function generateAccessToken(id){
+    return jwt.sign({userId: id}, 'secretKeyIsBiggerValue');
+}
