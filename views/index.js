@@ -3,10 +3,22 @@ let textMessage = document.getElementById("messages");
 let parentNode = document.getElementById("allMessages");
 let goBackbtn = document.getElementById("goback");
 
+function parseJwt (token) {
+    var base64Url = token.split('.')[1];
+    var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+
+    return JSON.parse(jsonPayload);
+}
+
 
 //showing message from DB
 window.addEventListener("DOMContentLoaded", async(e)=>{
     const token = localStorage.getItem("token");
+    const userId=parseJwt(token);
+    console.log("userId=",userId);
     const grpid = localStorage.getItem("groupId");
     const response = await axios.get(`http://localhost:3000/show-message/${grpid}`,{headers:{"Authorization": token}});
         console.log(response.data);

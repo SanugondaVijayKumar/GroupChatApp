@@ -38,11 +38,13 @@ exports.getMessages = async(req,res,next)=>{
     try{
         const gid = req.params.id;
         //console.log(gid);
+        //console.log("entered into getmessages function");
         const data = await message.findAll({
-            where: {
-                groupId :gid
-            }
+            // where: {
+            //     groupId :gid
+            // }
         })
+        
         return res.json({
             allMessage: data,
             success: true
