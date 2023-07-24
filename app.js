@@ -21,7 +21,7 @@ const messageRoutes = require('./routes/message');
 const groupRoutes = require('./routes/creategroup');
 const contentRoutes = require('./routes/groupmessage');
 
-const accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), {flag: 'a'});
+//const accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), {flag: 'a'});
 
 
 app.use(express.json());
