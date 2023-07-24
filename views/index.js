@@ -20,14 +20,18 @@ window.addEventListener("DOMContentLoaded", async(e)=>{
     const userId=parseJwt(token);
     console.log("userId=",userId);
     const grpid = localStorage.getItem("groupId");
-    const response = await axios.get(`http://localhost:3000/show-message/${grpid}`,{headers:{"Authorization": token}});
+    async function gettingChat(){
+        const response = await axios.get(`http://localhost:3000/show-message/${grpid}`,{headers:{"Authorization": token}});
         console.log(response.data);
         //console.log(response.data.allMessage.length);
         for(let i=0;i<response.data.allMessage.length;i++){
             showChatOnBrowser(response.data.allMessage[i]);
         }
+    }
+
+    setInterval(gettingChat,1000);
     
-})
+});
 
 async function showChatOnBrowser(show){
     try{
